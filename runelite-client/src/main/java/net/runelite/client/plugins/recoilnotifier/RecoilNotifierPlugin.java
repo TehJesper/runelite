@@ -59,7 +59,7 @@ public class RecoilNotifierPlugin extends Plugin {
 		if (Optional.ofNullable(equipment).isPresent()) {
 			this.recoilPresent = !equipment.contains(2550);
 			sendChatMessage("test123");
-			TimeUnit.SECONDS.sleep(10);
+			Thread.sleep(10000);
 		}
 	}
 	private void sendChatMessage(String chatMessage)
