@@ -81,7 +81,7 @@ class LapCounterOverlay extends OverlayPanel
 		}
 
 		panelComponent.getChildren().add(LineComponent.builder()
-			.left("Total Laps:")
+			.left("Total Lapsys:")
 			.right(Integer.toString(session.getTotalLaps()))
 			.build());
 
