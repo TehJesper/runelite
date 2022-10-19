@@ -62,7 +62,11 @@ public class RecoilNotifierPlugin extends Plugin {
 //
 //		}
 //	}
-	//merge conflict test
+
+
+
+	//merge conflict test on the branch
+
 	private void sendChatMessage(String chatMessage)
 	{
 		final String message = new ChatMessageBuilder()
