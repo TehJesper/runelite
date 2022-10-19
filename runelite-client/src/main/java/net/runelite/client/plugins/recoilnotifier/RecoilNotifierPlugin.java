@@ -54,14 +54,14 @@ public class RecoilNotifierPlugin extends Plugin {
 	private boolean recoilPresent = true;
 	@Subscribe
 
-	public void onGameTick(GameTick event) throws InterruptedException {
-		final ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
-		if (Optional.ofNullable(equipment).isPresent()) {
-			this.recoilPresent = !equipment.contains(2550);
-			sendChatMessage("test123");
-			Thread.sleep(10000);
-		}
-	}
+//	public void onGameTick(GameTick event) throws InterruptedException {
+//		final ItemContainer equipment = client.getItemContainer(InventoryID.EQUIPMENT);
+//		if (Optional.ofNullable(equipment).isPresent()) {
+//			this.recoilPresent = !equipment.contains(2550);
+//			sendChatMessage("test123");
+//
+//		}
+//	}
 	private void sendChatMessage(String chatMessage)
 	{
 		final String message = new ChatMessageBuilder()
