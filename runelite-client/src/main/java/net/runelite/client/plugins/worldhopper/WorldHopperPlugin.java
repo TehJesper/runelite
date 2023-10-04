@@ -211,6 +211,7 @@ public class WorldHopperPlugin extends Plugin
 
 		panel.setSubscriptionFilterMode(config.subscriptionFilter());
 		panel.setRegionFilterMode(config.regionFilter());
+		panel.setWorldTypeFilters(config.worldTypeFilter());
 
 		// The plugin has its own executor for pings, as it blocks for a long time
 		hopperExecutorService = new ExecutorServiceExceptionLogger(Executors.newSingleThreadScheduledExecutor());
@@ -278,6 +279,10 @@ public class WorldHopperPlugin extends Plugin
 					break;
 				case "regionFilter":
 					panel.setRegionFilterMode(config.regionFilter());
+					updateList();
+					break;
+				case "worldTypeFilter":
+					panel.setWorldTypeFilters(config.worldTypeFilter());
 					updateList();
 					break;
 			}
@@ -533,7 +538,7 @@ public class WorldHopperPlugin extends Plugin
 		int worldIdx = worlds.indexOf(currentWorld);
 		int totalLevel = client.getTotalLevel();
 
-		final Set<RegionFilterMode> regionFilter = config.quickHopRegionFilter();
+		final Set<RegionFilterMode> regionFilter = config.regionFilter();
 
 		World world;
 		do
@@ -854,7 +859,11 @@ public class WorldHopperPlugin extends Plugin
 
 		int ping = ping(world);
 		log.trace("Ping for world {} is: {}", world.getId(), ping);
-		SwingUtilities.invokeLater(() -> panel.updatePing(world.getId(), ping));
+
+		if (panel.isActive())
+		{
+			SwingUtilities.invokeLater(() -> panel.updatePing(world.getId(), ping));
+		}
 	}
 
 	/**
@@ -876,10 +885,20 @@ public class WorldHopperPlugin extends Plugin
 			return;
 		}
 
-		currentPing = ping(currentWorld);
+		int ping = ping(currentWorld);
 		log.trace("Ping for current world is: {}", currentPing);
 
-		SwingUtilities.invokeLater(() -> panel.updatePing(currentWorld.getId(), currentPing));
+		if (ping < 0)
+		{
+			return;
+		}
+
+		currentPing = ping;
+
+		if (panel.isActive())
+		{
+			SwingUtilities.invokeLater(() -> panel.updatePing(currentWorld.getId(), currentPing));
+		}
 	}
 
 	Integer getStoredPing(World world)

@@ -54,9 +54,14 @@ public interface Callbacks
 	void postDeferred(Object event);
 
 	/**
-	 * Called each tick
+	 * Called at the beginning of each tick
 	 */
 	void tick();
+
+	/**
+	 * Called at the end of each tick
+	 */
+	void tickEnd();
 
 	/**
 	 * Called each frame
@@ -201,4 +206,10 @@ public interface Callbacks
 	 * @param reason
 	 */
 	void error(String message, Throwable reason);
+
+	/**
+	 * Called when the client wants to open a URL
+	 * @param url
+	 */
+	void openUrl(String url);
 }

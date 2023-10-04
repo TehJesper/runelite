@@ -51,6 +51,7 @@ import net.runelite.api.events.GameTick;
 import net.runelite.api.events.GraphicChanged;
 import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.InteractingChanged;
+import net.runelite.api.events.NpcChanged;
 import net.runelite.client.Notifier;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -149,6 +150,7 @@ public class IdleNotifierPlugin extends Plugin
 			case WOODCUTTING_3A_AXE:
 			case WOODCUTTING_CRYSTAL:
 			case WOODCUTTING_TRAILBLAZER:
+			case BLISTERWOOD_JUMP_SCARE:
 			/* Cooking(Fire, Range) */
 			case COOKING_FIRE:
 			case COOKING_RANGE:
@@ -200,6 +202,7 @@ public class IdleNotifierPlugin extends Plugin
 			case SMITHING_CANNONBALL:
 			/* Fishing */
 			case FISHING_CRUSHING_INFERNAL_EELS:
+			case FISHING_CRUSHING_INFERNAL_EELS_IMCANDO_HAMMER:
 			case FISHING_CUTTING_SACRED_EELS:
 			case FISHING_BIG_NET:
 			case FISHING_NET:
@@ -261,6 +264,22 @@ public class IdleNotifierPlugin extends Plugin
 			case MINING_MOTHERLODE_3A:
 			case MINING_MOTHERLODE_CRYSTAL:
 			case MINING_MOTHERLODE_TRAILBLAZER:
+			/* Mining(Crashed Star) */
+			case MINING_CRASHEDSTAR_BRONZE:
+			case MINING_CRASHEDSTAR_IRON:
+			case MINING_CRASHEDSTAR_STEEL:
+			case MINING_CRASHEDSTAR_BLACK:
+			case MINING_CRASHEDSTAR_MITHRIL:
+			case MINING_CRASHEDSTAR_ADAMANT:
+			case MINING_CRASHEDSTAR_RUNE:
+			case MINING_CRASHEDSTAR_GILDED:
+			case MINING_CRASHEDSTAR_DRAGON:
+			case MINING_CRASHEDSTAR_DRAGON_UPGRADED:
+			case MINING_CRASHEDSTAR_DRAGON_OR:
+			case MINING_CRASHEDSTAR_DRAGON_OR_TRAILBLAZER:
+			case MINING_CRASHEDSTAR_INFERNAL:
+			case MINING_CRASHEDSTAR_3A:
+			case MINING_CRASHEDSTAR_CRYSTAL:
 			/* Herblore */
 			case HERBLORE_PESTLE_AND_MORTAR:
 			case HERBLORE_POTIONMAKING:
@@ -336,34 +355,27 @@ public class IdleNotifierPlugin extends Plugin
 			lastInteracting = Instant.now();
 		}
 
-		final boolean isNpc = target instanceof NPC;
-
 		// If this is not NPC, do not process as we are not interested in other entities
-		if (!isNpc)
+		if (!(target instanceof NPC))
 		{
 			return;
 		}
 
-		final NPC npc = (NPC) target;
-		final NPCComposition npcComposition = npc.getComposition();
-		final List<String> npcMenuActions = Arrays.asList(npcComposition.getActions());
+		checkNpcInteraction((NPC) target);
+	}
 
-		if (npcMenuActions.contains("Attack"))
+	// this event is needed to handle some rare npcs where "Attack" is not used to initiate combat
+	// for example, kraken starts the fight with "Disturb" then changes into another form with "Attack"
+	@Subscribe
+	public void onNpcChanged(NpcChanged event)
+	{
+		NPC npc = event.getNpc();
+		if (client.getLocalPlayer().getInteracting() != npc)
 		{
-			// Player is most likely in combat with attack-able NPC
-			resetTimers();
-			lastInteract = target;
-			lastInteracting = Instant.now();
-			lastInteractWasCombat = true;
+			return;
 		}
-		else if (target.getName() != null && target.getName().contains(FISHING_SPOT))
-		{
-			// Player is fishing
-			resetTimers();
-			lastInteract = target;
-			lastInteracting = Instant.now();
-			lastInteractWasCombat = false;
-		}
+
+		checkNpcInteraction(npc);
 	}
 
 	@Subscribe
@@ -506,6 +518,29 @@ public class IdleNotifierPlugin extends Plugin
 		}
 	}
 
+	private void checkNpcInteraction(final NPC target)
+	{
+		final NPCComposition npcComposition = target.getComposition();
+		final List<String> npcMenuActions = Arrays.asList(npcComposition.getActions());
+
+		if (npcMenuActions.contains("Attack"))
+		{
+			// Player is most likely in combat with attack-able NPC
+			resetTimers();
+			lastInteract = target;
+			lastInteracting = Instant.now();
+			lastInteractWasCombat = true;
+		}
+		else if (target.getName() != null && target.getName().contains(FISHING_SPOT))
+		{
+			// Player is fishing
+			resetTimers();
+			lastInteract = target;
+			lastInteracting = Instant.now();
+			lastInteractWasCombat = false;
+		}
+	}
+
 	private boolean checkFullSpecEnergy()
 	{
 		int currentSpecEnergy = client.getVarpValue(VarPlayer.SPECIAL_ATTACK_PERCENT);
@@ -603,7 +638,7 @@ public class IdleNotifierPlugin extends Plugin
 			return false;
 		}
 
-		if (client.getEnergy() <= config.getLowEnergyThreshold())
+		if (client.getEnergy() / 100 <= config.getLowEnergyThreshold())
 		{
 			if (shouldNotifyLowEnergy)
 			{
@@ -626,7 +661,7 @@ public class IdleNotifierPlugin extends Plugin
 			return false;
 		}
 
-		if (client.getEnergy() >= config.getHighEnergyThreshold())
+		if (client.getEnergy() / 100 >= config.getHighEnergyThreshold())
 		{
 			if (shouldNotifyHighEnergy)
 			{
