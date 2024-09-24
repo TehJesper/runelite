@@ -75,6 +75,8 @@ public class BoostsPlugin extends Plugin
 		Skill.MINING, Skill.AGILITY, Skill.SMITHING, Skill.HERBLORE, Skill.FISHING, Skill.THIEVING,
 		Skill.COOKING, Skill.CRAFTING, Skill.FIREMAKING, Skill.FLETCHING, Skill.WOODCUTTING, Skill.RUNECRAFT,
 		Skill.SLAYER, Skill.FARMING, Skill.CONSTRUCTION, Skill.HUNTER);
+	private static final Set<Skill> LEAGUE_SKILLS = ImmutableSet.of(
+		Skill.SMITHING, Skill.HERBLORE, Skill.COOKING,Skill.FLETCHING);
 
 	@Inject
 	private Notifier notifier;
@@ -317,6 +319,12 @@ public class BoostsPlugin extends Plugin
 				shownSkills.addAll(BOOSTABLE_COMBAT_SKILLS);
 				shownSkills.addAll(BOOSTABLE_NON_COMBAT_SKILLS);
 				break;
+			case LEAGUES:
+				shownSkills.addAll(BOOSTABLE_COMBAT_SKILLS);
+				shownSkills.addAll(BOOSTABLE_NON_COMBAT_SKILLS);
+				shownSkills.removeAll(LEAGUE_SKILLS);
+				break;
+
 		}
 		updateBoostedStats();
 	}
