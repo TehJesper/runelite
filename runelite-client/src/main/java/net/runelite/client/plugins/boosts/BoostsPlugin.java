@@ -76,7 +76,7 @@ public class BoostsPlugin extends Plugin
 		Skill.COOKING, Skill.CRAFTING, Skill.FIREMAKING, Skill.FLETCHING, Skill.WOODCUTTING, Skill.RUNECRAFT,
 		Skill.SLAYER, Skill.FARMING, Skill.CONSTRUCTION, Skill.HUNTER);
 	private static final Set<Skill> LEAGUE_SKILLS = ImmutableSet.of(
-		Skill.SMITHING, Skill.HERBLORE, Skill.COOKING,Skill.FLETCHING);
+		Skill.SMITHING, Skill.HERBLORE, Skill.COOKING,Skill.FLETCHING,Skill.CRAFTING);
 
 	@Inject
 	private Notifier notifier;
