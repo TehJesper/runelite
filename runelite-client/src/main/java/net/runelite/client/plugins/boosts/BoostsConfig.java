@@ -44,8 +44,7 @@ public interface BoostsConfig extends Config
 		NONE,
 		COMBAT,
 		NON_COMBAT,
-		BOTH,
-		LEAGUES
+		BOTH
 	}
 
 	@ConfigItem(
