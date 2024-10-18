@@ -7,5 +7,4 @@ public class NewPluginPlugin {
     // abort test master
     // new plugin test 2
 
-
 }
