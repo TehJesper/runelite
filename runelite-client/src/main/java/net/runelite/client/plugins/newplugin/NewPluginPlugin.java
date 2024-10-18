@@ -2,6 +2,6 @@ package net.runelite.client.plugins.newplugin;
 
 public class NewPluginPlugin {
 
-    // new plugin test
+    // new plugin test 2
 
 }
