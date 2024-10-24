@@ -4,3 +4,5 @@ public class NewPluginPlugin {
 
     private int variable;
 }
+
+// aaa
