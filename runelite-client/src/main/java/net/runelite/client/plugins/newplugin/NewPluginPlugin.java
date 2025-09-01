@@ -4,6 +4,7 @@ public class NewPluginPlugin {
 
 
     private String variable;
+    private int test;
 
 }
 
