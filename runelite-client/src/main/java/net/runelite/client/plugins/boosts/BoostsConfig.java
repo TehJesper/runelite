@@ -27,6 +27,7 @@ package net.runelite.client.plugins.boosts;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.Notification;
 
 @ConfigGroup("boosts")
 public interface BoostsConfig extends Config
@@ -43,7 +44,8 @@ public interface BoostsConfig extends Config
 		NONE,
 		COMBAT,
 		NON_COMBAT,
-		BOTH
+		BOTH,
+		LEAGUES
 	}
 
 	@ConfigItem(
@@ -126,7 +128,7 @@ public interface BoostsConfig extends Config
 	@ConfigItem(
 		keyName = "boostThreshold",
 		name = "Boost threshold",
-		description = "The threshold at which boosted levels will be displayed in a different color. A value of 0 will disable the feature.",
+		description = "Number of levels above your base level at which boosted levels will be displayed in a different color.",
 		position = 12
 	)
 	default int boostThreshold()
@@ -137,11 +139,11 @@ public interface BoostsConfig extends Config
 	@ConfigItem(
 		keyName = "notifyOnBoost",
 		name = "Notify on boost threshold",
-		description = "Configures whether or not a notification will be sent for boosted stats.",
+		description = "Configures whether or not a notification will be sent when boosted stats drain to the boost threshold.",
 		position = 13
 	)
-	default boolean notifyOnBoost()
+	default Notification notifyOnBoost()
 	{
-		return true;
+		return Notification.OFF;
 	}
 }

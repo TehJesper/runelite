@@ -25,9 +25,9 @@
 package net.runelite.api;
 
 /**
- * Represents the entire 3D scene
+ * Represents a 3D scene
  */
-public interface Scene
+public interface Scene extends Renderable
 {
 	/**
 	 * Gets the tiles in the scene
@@ -50,6 +50,12 @@ public interface Scene
 	void setDrawDistance(int drawDistance);
 
 	/**
+	 * Get the world view id of this scene
+	 * @return the world view id, or -1 if this is the top level scene
+	 */
+	int getWorldViewId();
+
+	/**
 	 * Get the minimum scene level which will be rendered
 	 *
 	 * @return the plane of the minimum level
@@ -62,6 +68,12 @@ public interface Scene
 	 * @param minLevel the plane of the minimum level
 	 */
 	void setMinLevel(int minLevel);
+
+	/**
+	 * Remove a tile from the scene
+	 * @param tile
+	 */
+	void removeTile(Tile tile);
 
 	/**
 	 * Remove a game object from the scene
